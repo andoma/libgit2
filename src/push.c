@@ -389,9 +389,13 @@ static int calculate_work(git_push *push)
 			/* This is a create or update.  Local ref must exist. */
 			if (git_reference_name_to_id(
 					&spec->loid, push->repo, spec->refspec.src) < 0) {
-				giterr_set(GITERR_REFERENCE, "no such reference '%s'", spec->refspec.src);
-				return -1;
-			}
+
+				if (git_oid_fromstrp(&spec->loid, spec->refspec.src)) {
+					giterr_set(GITERR_REFERENCE, "no such reference '%s'",
+						   spec->refspec.src);
+					return -1;
+				}
+                        }
 		}
 
 		/* Remote ref may or may not (e.g. during create) already exist. */
