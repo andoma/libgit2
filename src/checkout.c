@@ -2472,7 +2472,7 @@ static int checkout_data_init(
 		if (data->index->on_disk)
 			error = checkout_lookup_head_tree(&data->opts.baseline, repo);
 
-		if (error == GIT_EUNBORNBRANCH) {
+		if (error == GIT_EUNBORNBRANCH || error == GIT_ENOTFOUND) {
 			error = 0;
 			giterr_clear();
 		}
